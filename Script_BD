@@ -1,0 +1,75 @@
+DROP TABLE IF EXISTS calificaciones;
+DROP TABLE IF EXISTS viajes;
+DROP TABLE IF EXISTS vehiculos;    
+DROP TABLE IF EXISTS usuarios;
+
+CREATE TABLE usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    correo VARCHAR(100) UNIQUE,
+    contrasena VARCHAR(255),
+    telefono VARCHAR(15),
+    rol ENUM('conductor', 'pasajero') DEFAULT 'pasajero', 
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE vehiculos (
+    id_vehiculo INT AUTO_INCREMENT PRIMARY KEY,
+    modelo VARCHAR(100),
+    marca VARCHAR(100),
+    anio INT,
+    placa VARCHAR(20) UNIQUE,
+    id_conductor INT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_conductor) REFERENCES usuarios(id_usuario) 
+);
+
+CREATE TABLE viajes (
+    id_viaje INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT, 
+    id_conductor INT, 
+    origen VARCHAR(255),
+    destino VARCHAR(255),
+    distancia DECIMAL(5, 2),
+    estado ENUM('solicitado', 'en_progreso', 'completado', 'cancelado') DEFAULT 'solicitado',
+    fecha_solicitud TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_completado TIMESTAMP NULL,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario), 
+    FOREIGN KEY (id_conductor) REFERENCES usuarios(id_usuario) 
+);
+
+CREATE TABLE calificaciones (
+    id_calificacion INT AUTO_INCREMENT PRIMARY KEY,
+    id_viaje INT,
+    id_usuario INT,
+    calificacion DECIMAL(2, 1),
+    comentario TEXT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_viaje) REFERENCES viajes(id_viaje),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
+
+-- Inserción de usuarios
+INSERT INTO usuarios (nombre, correo, contrasena, telefono, rol) VALUES
+('Juan Pérez', 'juan.perez@gmail.com', 'password123', '555-1234', 'pasajero'),
+('Ana García', 'ana.garcia@hotmail.com', 'ana123', '555-5678', 'pasajero'),
+('Luis López', 'luis.lopez@correo.com', 'luis456', '555-9876', 'conductor'),
+('Carlos Sánchez', 'carlos.sanchez@correo.com', 'driver123', '555-1111', 'conductor'),
+('María Rodríguez', 'maria.rodriguez@correo.com', 'driver456', '555-2222', 'conductor');
+
+-- Inserción de vehículos
+INSERT INTO vehiculos (modelo, marca, anio, placa, id_conductor) VALUES
+('Civic', 'Honda', 2020, 'ABC1234', 4),
+('Corolla', 'Toyota', 2019, 'XYZ5678', 5);
+
+-- Inserción de viajes
+INSERT INTO viajes (id_usuario, id_conductor, origen, destino, distancia, estado) VALUES
+(1, 4, 'Calle A, 123', 'Calle B, 456', 5.3, 'completado'),
+(2, 5, 'Calle C, 789', 'Calle D, 101', 7.1, 'completado'),
+(3, 4, 'Calle E, 102', 'Calle F, 203', 2.8, 'solicitado');
+
+-- Inserción de calificaciones
+INSERT INTO calificaciones (id_viaje, id_usuario, calificacion, comentario) VALUES
+(1, 1, 4.5, 'Buen conductor.'),
+(2, 2, 4.0, 'Todo bien.'),
+(3, 3, 5.0, 'Excelente servicio.');
