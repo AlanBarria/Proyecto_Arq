@@ -15,11 +15,11 @@ export const getAllUsuarios = async (req, res) => {
 //Mustra un usuario
 export const getUsuario = async (req, res) => {
     try {
-        const usuario = UsuarioModel.findAll()
+        const usuario = await UsuarioModel.findAll()
             where:{
                 id:req.params.id
         }
-        res.json(usuario)
+        res.json(usuario[0])
     } catch (error) {
         res.json({message: error.message})
     }
