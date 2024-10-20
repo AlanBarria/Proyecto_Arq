@@ -17,7 +17,7 @@ export const getUsuario = async (req, res) => {
     try {
         const usuario = await UsuarioModel.findAll()
             where:{
-                id:req.params.id
+                id_usuario:req.params.id
         }
         res.json(usuario[0])
     } catch (error) {
@@ -42,7 +42,7 @@ export const updateUsuario = async (req, res) => {
     try {
         await UsuarioModel.update(req.body,{
             where: {
-                id: req.params.id
+                id_usuario: req.params.id
             }
         })
         res.json({
@@ -58,7 +58,7 @@ export const deleteUsuario = async (req, res) => {
     try {
         await UsuarioModel.destroy({
             where: {
-                id: req.params.id
+                id_usuario: req.params.id
             }
         })
         res.json({
