@@ -2,34 +2,48 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const URI = 'http://localhost:8000/usuarios'
+const URI = 'http://localhost:8000/usuarios' // Asegúrate de que este es el puerto correcto
 
-const CompEditarUsuario = () =>{
-    const [nombre, setNombre] = useState("")
-    const [correo, setCorreo] = useState("")
-    const [contrasena, setContrasena] = useState("")
-    const [telefono, setTelefono] = useState("")
-    const [rol, setRol] = useState("")
-    const navigate = useNavigate()
+const CompEditarUsuario = () => {
+    const [usuario, setUsuario] = useState({
+        nombre: "",
+        correo: "",
+        contrasena: "",
+        telefono: "",
+        rol: ""
+    });
+    const navigate = useNavigate();
+    const { id } = useParams();
 
-    const {id} = useParams()
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setUsuario(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    }
 
     const update = async (e) => {
-        e.preventDefault()
-        await axios.put(`${URI}/${id}`, {nombre: nombre, correo: correo, contrasena: contrasena, telefono: telefono, rol: rol})
-        navigate('/')
+        e.preventDefault();
+        try {
+            await axios.put(`${URI}/${id}`, usuario);
+            navigate('/');
+        } catch (error) {
+            console.error("Error al actualizar usuario:", error);
+        }
     } 
 
-    useEffect( () => {
-        getUsuarioById()
-    },[])
-    const getUsuarioById = async () =>{
-            const res = await axios.get(`${URI}/${id}`)
-            setNombre(res.data.nombre)
-            setCorreo(res.data.correo)
-            setContrasena(res.data.contrasena)
-            setTelefono(res.data.telefono)
-            setRol(res.data.rol)
+    useEffect(() => {
+        getUsuarioById();
+    }, []);
+
+    const getUsuarioById = async () => {
+        try {
+            const res = await axios.get(`${URI}/${id}`);
+            setUsuario(res.data);
+        } catch (error) {
+            console.error("Error al obtener usuario:", error);
+        }
     }
     
     return(
@@ -38,35 +52,32 @@ const CompEditarUsuario = () =>{
             <form onSubmit={update}>
                 <div className='mb-3'> 
                     <label className='form-label'>Nombre</label>
-                    <input value={nombre} onChange={ (e) => setNombre(e.target.value) } type='text' className='form-control'></input>
+                    <input name="nombre" value={usuario.nombre} onChange={handleChange} type='text' className='form-control' />
                 </div>
                 <div className='mb-3'>
                     <label className='form-label'>Correo</label>
-                    <input value={correo} onChange={ (e) => setCorreo(e.target.value) } type='text' className='form-control'></input>
+                    <input name="correo" value={usuario.correo} onChange={handleChange} type='text' className='form-control' />
                 </div>
                 <div className='mb-3'>
                     <label className='form-label'>Contraseña</label>
-                    <input value={contrasena} onChange={ (e) => setContrasena(e.target.value) } type='password' className='form-control'></input>
+                    <input name="contrasena" value={usuario.contrasena} onChange={handleChange} type='password' className='form-control' />
                 </div>
                 <div className='mb-3'>
-                    <label className='form-label'>Telefono</label>
-                    <input value={telefono} onChange={ (e) => setTelefono(e.target.value) } type='number' className='form-control'></input>
+                    <label className='form-label'>Teléfono</label>
+                    <input name="telefono" value={usuario.telefono} onChange={handleChange} type='number' className='form-control' />
                 </div>
                 <div className='mb-3'>
                     <label className='form-label'>Rol</label>
-                    <input value={rol} onChange={ (e) => setRol(e.target.value) } type='text' className='form-control'></input>
-                </div>
-                {/* <div className='mb-3'>
-                    <select value={rol} onChange={ (e) => setRol(e.target.value) } class="form-select" id="floatingSelectGrid">
-                        <option selected="">Roles</option>
-                        <option value="1">conductor</option>
-                        <option value="2">pasajero</option>
+                    <select name="rol" value={usuario.rol} onChange={handleChange} className="form-select">
+                        <option value="">Seleccione un rol</option>
+                        <option value="conductor">Conductor</option>
+                        <option value="pasajero">Pasajero</option>
                     </select>
-                </div> */}      
-                <button type='submit' className='btn btn-primary'><i class="fa-solid fa-floppy-disk"></i></button>
+                </div>
+                <button type='submit' className='btn btn-primary'><i className="fa-solid fa-floppy-disk"></i> Guardar</button>
             </form>
         </div>
     )
 }
 
-export default CompEditarUsuario    
+export default CompEditarUsuario

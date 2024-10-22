@@ -13,15 +13,17 @@ export const getAllUsuarios = async (req, res) => {
 }
 
 //Mustra un usuario
+//Muestra un usuario
 export const getUsuario = async (req, res) => {
     try {
-        const usuario = await UsuarioModel.findAll()
-            where:{
-                id_usuario:req.params.id
+        const usuario = await UsuarioModel.findByPk(req.params.id);
+        if (usuario) {
+            res.json(usuario);
+        } else {
+            res.status(404).json({ message: "Usuario no encontrado" });
         }
-        res.json(usuario[0])
     } catch (error) {
-        res.json({message: error.message})
+        res.status(500).json({message: error.message});
     }
 }
 
