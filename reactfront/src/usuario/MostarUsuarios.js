@@ -47,7 +47,7 @@ const CompMostarUsuarios = () =>{
                                 <td> {usuario.telefono} </td>
                                 <td> {usuario.rol} </td>
                                 <td>
-                                    <Link to={`/edit/${usuario.id}`} className='btn btn-info'><i className="fa-solid fa-pen-to-square"></i></Link>
+                                    <Link to={`/edit/${usuario.id_usuario}`} className='btn btn-info'><i className="fa-solid fa-pen-to-square"></i></Link>
                                     <button onClick={ ()=>deleteUsuario(usuario.id) } className='btn btn-danger'><i className="fa-solid fa-trash"></i></button>
                                 </td>
                             </tr>

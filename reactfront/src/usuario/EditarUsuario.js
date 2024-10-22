@@ -12,20 +12,19 @@ const CompEditarUsuario = () =>{
     const [rol, setRol] = useState("")
     const navigate = useNavigate()
 
-    const id = useParams()
+    const {id} = useParams()
 
     const update = async (e) => {
         e.preventDefault()
-        await axios.put(URI+id, {nombre: nombre, correo: correo, contrasena: contrasena, telefono: telefono, rol: rol})
+        await axios.put(`${URI}/${id}`, {nombre: nombre, correo: correo, contrasena: contrasena, telefono: telefono, rol: rol})
         navigate('/')
     } 
 
     useEffect( () => {
         getUsuarioById()
     },[])
-
     const getUsuarioById = async () =>{
-            const res = await axios.get(URI+id)
+            const res = await axios.get(`${URI}/${id}`)
             setNombre(res.data.nombre)
             setCorreo(res.data.correo)
             setContrasena(res.data.contrasena)
@@ -63,7 +62,7 @@ const CompEditarUsuario = () =>{
                         <option value="1">conductor</option>
                         <option value="2">pasajero</option>
                     </select>
-                </div> */}
+                </div> */}      
                 <button type='submit' className='btn btn-primary'><i class="fa-solid fa-floppy-disk"></i></button>
             </form>
         </div>

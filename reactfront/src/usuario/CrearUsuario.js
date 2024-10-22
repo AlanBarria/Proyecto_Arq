@@ -14,7 +14,13 @@ const CompCrearUsuario = () =>{
 
     const store = async (e) =>{
         e.preventDefault()
-        await axios.post(URI, {nombre: nombre, correo: correo, contrasena: contrasena, telefono: telefono, rol: rol})
+        await axios.post(URI, {
+            nombre: nombre, 
+            correo: correo, 
+            contrasena: contrasena, 
+            telefono: telefono, 
+            rol: rol
+        })
         navigate('/')
     }
 
