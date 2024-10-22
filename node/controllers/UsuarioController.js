@@ -58,15 +58,21 @@ export const updateUsuario = async (req, res) => {
 //Elimina un usuario
 export const deleteUsuario = async (req, res) => {
     try {
-        await UsuarioModel.destroy({
+        const result = await UsuarioModel.destroy({
             where: {
                 id_usuario: req.params.id
             }
-        })
-        res.json({
-            "message":"¡Registro eliminado correctamente!"
-        })
+        });
+        if (result === 1) {
+            res.json({
+                "message": "¡Registro eliminado correctamente!"
+            });
+        } else {
+            res.status(404).json({
+                "message": "Usuario no encontrado o ya fue eliminado"
+            });
+        }
     } catch (error) {
-        res.json({message: error.message})
+        res.status(500).json({message: error.message});
     }
 }
