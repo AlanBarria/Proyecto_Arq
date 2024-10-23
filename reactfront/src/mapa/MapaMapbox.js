@@ -8,15 +8,24 @@ const MapView = () => {
   const [userLocation, setUserLocation] = useState([0, 0]);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setUserLocation([longitude, latitude]);
-      },
-      (error) => {
-        console.error('Error obteniendo la ubicación', error);
+    const getUserLocation = () => {
+      if (!navigator.geolocation) {
+        console.error('Geolocation is not supported by your browser');
+        return;
       }
-    );
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setUserLocation([longitude, latitude]);
+        },
+        (error) => {
+          console.error('Error obteniendo la ubicación', error);
+        }
+      );
+    };
+
+    getUserLocation();
   }, []);
 
   useEffect(() => {
@@ -27,6 +36,17 @@ const MapView = () => {
         center: userLocation,
         zoom: 14,
       });
+
+      // Crear un marcador en la ubicación del usuario
+      const marker = new mapboxgl.Marker()
+        .setLngLat(userLocation)
+        .addTo(map);
+
+      // Opcional: Centrar el mapa en el marcador
+      map.flyTo({
+        center: userLocation,
+        essential: true // Esto asegura que la animación se realice
+      });
     }
   }, [userLocation]);
 
@@ -34,11 +54,15 @@ const MapView = () => {
     <div
       ref={mapDiv}
       style={{
+        backgroundColor: 'orange',
         height: '100vh',
         width: '100vw',
+        position: 'fixed',
+        top: 0,
+        left: 0,
       }}
     >
-      {userLocation[0] !== 0 ? `Lat: ${userLocation[1]}, Lng: ${userLocation[0]}` : 'Cargando...'}
+      {userLocation ? `Lat: ${userLocation[1]}, Lng: ${userLocation[0]}` : 'Cargando...'}
     </div>
   );
 };
