@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const URI = 'http://localhost:8000/usuarios' // Asegúrate de que este es el puerto correcto
+const URI = 'http://localhost:8000/usuarios'
 
 const CompEditarUsuario = () => {
     const [usuario, setUsuario] = useState({

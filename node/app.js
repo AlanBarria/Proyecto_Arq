@@ -1,26 +1,32 @@
-import express from "express"
-import cors from 'cors'
-import db from "./database/db.js "
-import usuarioRoutes from "./routes/routes.js"
+import express from "express";
+import cors from 'cors';
+import db from "./database/db.js";
+import usuarioRoutes from "./routes/routes.js";  // Rutas de usuario
 
-const app = express()
+const app = express();
 
-app.use(cors())
-app.use(express.json())
-app.use('/usuarios',usuarioRoutes)
+// Middlewares
+app.use(cors());  // Habilitar CORS
+app.use(express.json());  // Procesar datos JSON (sustituye a bodyParser.json())
+app.use(express.urlencoded({ extended: true }));  // Procesar datos de formularios (sustituye a bodyParser.urlencoded())
 
+// Rutas
+app.use('/usuarios', usuarioRoutes);  // Usa las rutas de usuarios
+
+// Conexión a la base de datos
 try {
-    await db.authenticate()
-    console.log('Conexión exitosa a la DB')
+    await db.authenticate();
+    console.log('Conexión exitosa a la DB');
 } catch (error) {
-    console.log(`El error de conexion es: ${error}`)
+    console.log(`El error de conexión es: ${error}`);
 }
 
-app.get('/', (req, res)=>{
-    res.send('Hola Mundo')
-})
+// Ruta básica para verificar el servidor
+app.get('/', (req, res) => {
+    res.send('Hola Mundo');
+});
 
-app.listen(8000, ()=>{
-    console.log('Server UP runnig in http://localhost:8000/')
-})
-
+// Levantar el servidor en el puerto 8000
+app.listen(8000, () => {
+    console.log('Server UP running in http://localhost:8000/');
+});
