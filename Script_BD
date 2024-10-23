@@ -37,7 +37,6 @@ CREATE TABLE viajes (
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario), 
     FOREIGN KEY (id_conductor) REFERENCES usuarios(id_usuario) 
 );
-
 CREATE TABLE calificaciones (
     id_calificacion INT AUTO_INCREMENT PRIMARY KEY,
     id_viaje INT,
