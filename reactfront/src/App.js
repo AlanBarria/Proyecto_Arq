@@ -15,11 +15,11 @@ function App() {
       </header>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element= { <CompMostarUsuarios></CompMostarUsuarios>} />
+          <Route path='admin/' element= { <CompMostarUsuarios></CompMostarUsuarios>} />
           <Route path='crear' element= { <CompCrearUsuario></CompCrearUsuario>} />
           <Route path='edit/:id' element= { <CompEditarUsuario></CompEditarUsuario> } />
           <Route path="registro" element={<Registro />} />
-          <Route path="login" element={<Login />} />
+          <Route path="/" element={<Login />} />
         </Routes>
       </BrowserRouter>
 

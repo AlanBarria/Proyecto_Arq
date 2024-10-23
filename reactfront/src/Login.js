@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     const [correo, setCorreo] = useState('');
@@ -56,6 +57,11 @@ const Login = () => {
                     />
                 </div>
                 <button type="submit">Ingresar</button>
+                <div className='mb-4'>
+                                <Link to="/registro" className='btn btn-primary'>
+                                    <i className="fas fa-user-plus me-2"></i>Registrarse
+                                </Link>
+                            </div>
             </form>
         </div>
     );
